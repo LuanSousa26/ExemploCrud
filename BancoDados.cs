@@ -22,9 +22,9 @@ namespace ExemploCrud
 
 
 
-/*
-     Forma Orientada a Objetos
-     */
+        /*
+             Forma Orientada a Objetos
+             */
         public bool Adicionar(Categorias cat)
         {
 
@@ -57,7 +57,7 @@ namespace ExemploCrud
                 // Aponta que os comandos serão realizados em cima da conexão igualada, ou seja, a Conexao.
                 //comandos.Connection = Conexao;
 
-                
+
                 //Define que o tipo de comando utilizado será Texto.
                 c1.comandos.CommandType = CommandType.Text;
 
@@ -108,9 +108,9 @@ namespace ExemploCrud
 
 
 
-    /*
-     Forma Estruturada
-     */
+        /*
+         Forma Estruturada
+         */
 
 
         public bool Atualizar(Categorias cat)
@@ -252,8 +252,8 @@ namespace ExemploCrud
         public List<Categorias> ListarCategorias(int Id)
         {
             List<Categorias> lista = new List<Categorias>();
-            
-             
+
+
             try
             {
                 Conexao = new SqlConnection();
@@ -261,27 +261,27 @@ namespace ExemploCrud
                 Conexao.Open();
                 comandos.Connection = Conexao;
 
-                
+
                 comandos.CommandType = CommandType.Text;
 
-                
+
                 comandos.CommandText = "SELECT * FROM Categorias idCategoria= @Id";
                 comandos.Parameters.AddWithValue("@Id", Id);
-                
+
                 //Reader
-                rd=comandos.ExecuteReader();
-                while(rd.Read())
+                rd = comandos.ExecuteReader();
+                while (rd.Read())
                 {
                     lista.Add(new Categorias
                     {
-                     //Pega a posição 1 da lista (Id da tabela categorias no banco de dados)
-                     IdCategoria=rd.GetInt32(0),
-                     //Pega a posição 2 da lista (Titulo da tabela categorias no banco de dados)
-                     Titulo=rd.GetString(1)
+                        //Pega a coluna 0 do banco (Id da tabela categorias no banco de dados)
+                        IdCategoria = rd.GetInt32(0),
+                        //Pega a coluna 1 do banco (Titulo da tabela categorias no banco de dados)
+                        Titulo = rd.GetString(1)
 
                     });
 
-                    
+
                 }
 
 
