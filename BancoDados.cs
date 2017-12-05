@@ -272,7 +272,7 @@ namespace ExemploCrud
                 rd = comandos.ExecuteReader();
                 while (rd.Read())
                 {
-                    lista.Add(new Categorias
+                    lista.Add(new Categorias()
                     {
                         //Pega a coluna 0 do banco (Id da tabela categorias no banco de dados)
                         IdCategoria = rd.GetInt32(0),
@@ -281,14 +281,24 @@ namespace ExemploCrud
 
                     });
 
+                    comandos.Parameters.Clear();
 
                 }
 
 
             }
-            catch
+            catch(SqlException e)
+           {
+               throw new Exception("Ocorreu um erro de banco de dados"+ e.Message);
+           }
+        
+            catch(Exception ex)
             {
-
+              throw new Exception ("Ocorreu um erro" + ex.Message);
+            }
+            finally
+            {
+                Conexao.Close();
             }
 
 
