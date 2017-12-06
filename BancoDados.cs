@@ -159,7 +159,7 @@ namespace ExemploCrud
 
                 //Limpa o parametro @Titulo, pois se tentasse inserir um valor sem limpa-lo haveria um erro.
                 comandos.Parameters.Clear();
-                 System.Console.WriteLine("Dados Atualizados com sucesso!");
+                System.Console.WriteLine("Dados Atualizados com sucesso!");
 
             }
             catch (SqlException Erro)
@@ -290,14 +290,14 @@ namespace ExemploCrud
 
 
             }
-            catch(SqlException e)
-           {
-               throw new Exception("Ocorreu um erro de banco de dados"+ e.Message);
-           }
-        
-            catch(Exception ex)
+            catch (SqlException e)
             {
-              throw new Exception("Ocorreu um erro de banco de dados"+ ex.Message);
+                throw new Exception("Ocorreu um erro de banco de dados" + e.Message);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro de banco de dados" + ex.Message);
             }
 
             finally
@@ -311,7 +311,7 @@ namespace ExemploCrud
 
         }
 
- public List<Categorias> ListarCategorias(string Titulo)
+        public List<Categorias> ListarCategorias(string Titulo)
         {
             List<Categorias> lista = new List<Categorias>();
 
@@ -349,14 +349,14 @@ namespace ExemploCrud
 
 
             }
-            catch(SqlException e)
-           {
-               throw new Exception("Ocorreu um erro de banco de dados"+ e.Message);
-           }
-        
-            catch(Exception ex)
+            catch (SqlException e)
             {
-              throw new Exception ("Ocorreu um erro" + ex.Message);
+                throw new Exception("Ocorreu um erro de banco de dados" + e.Message);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro" + ex.Message);
             }
             finally
             {
@@ -392,7 +392,7 @@ namespace ExemploCrud
 
 
                 comandos.CommandText = "SELECT * FROM Categorias";
-                
+
 
                 //Reader
                 rd = comandos.ExecuteReader();
@@ -408,25 +408,25 @@ namespace ExemploCrud
                     });
 
                     comandos.Parameters.Clear();
-                    
+
                 }
 
 
             }
-            catch(SqlException e)
-           {
-               throw new Exception("Ocorreu um erro de banco de dados"+ e.Message);
-           }
-        
-            catch(Exception ex)
+            catch (SqlException e)
             {
-              throw new Exception("Ocorreu um erro de banco de dados"+ ex.Message);
+                throw new Exception("Ocorreu um erro de banco de dados" + e.Message);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro de banco de dados" + ex.Message);
             }
 
             finally
             {
                 Conexao.Close();
-               
+
             }
 
 
@@ -436,7 +436,71 @@ namespace ExemploCrud
         }
 
 
+
+        public bool AdicionarCliente(Cliente cliente)
+        {
+            bool rs = false;
+            try
+            {
+                Crud c1 = new Crud();
+                c1.comandos.CommandType = CommandType.StoredProcedure;
+                c1.comandos.CommandText = "sp_cadCliente";
+
+                /*
+
+                Está indiciando que o parametro é do SQL 
+                
+                 CREATE PROCEDURE  sp_CadCliente
+                    @nome VARCHAR(50),
+                    @email VARCHAR(100),
+                    @cpf VARCHAR(20)
+
+                 */
+                SqlParameter ParametroNome = new SqlParameter("@nome", SqlDbType.VarChar, 50);
+                ParametroNome.Value=cliente.NomeCliente;
+                comandos.Parameters.Add(ParametroNome);
+                
+                SqlParameter ParametroEmail = new SqlParameter("@email", SqlDbType.VarChar, 100);
+                ParametroEmail.Value=cliente.EmailCliente;
+                comandos.Parameters.Add(ParametroEmail);
+
+                SqlParameter ParametroCPF = new SqlParameter("@CPF", SqlDbType.VarChar, 20);
+                ParametroCPF.Value=cliente.CPF;
+                comandos.Parameters.Add(ParametroCPF);
+
+                int e=comandos.ExecuteNonQuery();
+
+                if(e>0)
+                  rs=true;
+
+                  comandos.Parameters.Clear();
+                  System.Console.WriteLine("Cliente cadastrado com sucesso!\n");
+
+
+
+            }
+            catch(SqlException se)
+            {
+              throw new Exception(" Erro ao tentar inserir os dados"+ se.Message);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Erro inesperado"+ ex.Message);
+            }
+            finally
+            {
+             Conexao.Close();
+
+            }
+            return rs;
+
+        }
+
     }
 
 
+
+
+
 }
+

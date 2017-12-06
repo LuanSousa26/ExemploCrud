@@ -175,8 +175,24 @@ namespace ExemploCrud
 
 
                     case "2":
+                             
 
+                             
+                             Cliente Cliente1=new Cliente();
+                             BancoDados b1=new BancoDados();
 
+                             System.Console.WriteLine("Cadastro do cliente \n");
+                             System.Console.WriteLine("Insira o seu Nome:\n");
+                              Cliente1.NomeCliente=Console.ReadLine();
+
+                             System.Console.WriteLine("Insira o seu E-mail:\n");
+                             Cliente1.EmailCliente=Console.ReadLine();
+                             
+                             System.Console.WriteLine("Insira o seu CPF:\n");
+                             Cliente1.CPF=Console.ReadLine();
+                             
+                             b1.AdicionarCliente(Cliente1);
+                             
 
 
                         break;
