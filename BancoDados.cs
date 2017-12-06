@@ -81,7 +81,7 @@ namespace ExemploCrud
 
                 //Limpa o parametro @Titulo, pois se tentasse inserir um valor sem limpa-lo haveria um erro.
                 c1.comandos.Parameters.Clear();
-
+                System.Console.WriteLine("Categoria Salva com sucesso!\n Nome da categoria:" + cat.Titulo);
 
             }
             catch (SqlException Erro)
@@ -159,7 +159,7 @@ namespace ExemploCrud
 
                 //Limpa o parametro @Titulo, pois se tentasse inserir um valor sem limpa-lo haveria um erro.
                 comandos.Parameters.Clear();
-
+                 System.Console.WriteLine("Dados Atualizados com sucesso!");
 
             }
             catch (SqlException Erro)
@@ -208,7 +208,7 @@ namespace ExemploCrud
 
                 // @Titulo(Serve como um parametro, um elemento parameterizado)
                 //Define o comando de texto como um UPDATE e define que o campo titulo e Id será parameterizado e receberá o valor de @Titulo e @Id.
-                comandos.CommandText = "DELETE FROM Categorias SET WHERE idCategoria= @Id";
+                comandos.CommandText = "DELETE FROM Categorias WHERE idCategoria= @Id";
 
 
 
@@ -227,7 +227,7 @@ namespace ExemploCrud
 
                 //Limpa o parametro @Titulo, pois se tentasse inserir um valor sem limpa-lo haveria um erro.
                 comandos.Parameters.Clear();
-
+                System.Console.WriteLine("Categoria apagada com sucesso:");
 
             }
             catch (SqlException Erro)
@@ -259,13 +259,16 @@ namespace ExemploCrud
                 Conexao = new SqlConnection();
                 Conexao.ConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=Papelaria;user id=sa;password=senai@123;";
                 Conexao.Open();
-                comandos.Connection = Conexao;
 
+                //Instância a Váriavel comandos como um novo comando SQL.
+                comandos = new SqlCommand();
+
+                comandos.Connection = Conexao;
 
                 comandos.CommandType = CommandType.Text;
 
 
-                comandos.CommandText = "SELECT * FROM Categorias idCategoria= @Id";
+                comandos.CommandText = "SELECT * FROM Categorias WHERE idCategoria= @Id";
                 comandos.Parameters.AddWithValue("@Id", Id);
 
                 //Reader
@@ -294,8 +297,9 @@ namespace ExemploCrud
         
             catch(Exception ex)
             {
-              throw new Exception ("Ocorreu um erro" + ex.Message);
+              throw new Exception("Ocorreu um erro de banco de dados"+ ex.Message);
             }
+
             finally
             {
                 Conexao.Close();
@@ -357,6 +361,72 @@ namespace ExemploCrud
             finally
             {
                 Conexao.Close();
+            }
+
+
+            return lista;
+
+
+        }
+
+
+
+
+        public List<Categorias> ListarCategorias()
+        {
+            List<Categorias> lista = new List<Categorias>();
+
+
+            try
+            {
+                Conexao = new SqlConnection();
+                Conexao.ConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=Papelaria;user id=sa;password=senai@123;";
+                Conexao.Open();
+
+                //Instância a Váriavel comandos como um novo comando SQL.
+                comandos = new SqlCommand();
+
+                comandos.Connection = Conexao;
+
+                comandos.CommandType = CommandType.Text;
+
+
+                comandos.CommandText = "SELECT * FROM Categorias";
+                
+
+                //Reader
+                rd = comandos.ExecuteReader();
+                while (rd.Read())
+                {
+                    lista.Add(new Categorias()
+                    {
+                        //Pega a coluna 0 do banco (Id da tabela categorias no banco de dados)
+                        IdCategoria = rd.GetInt32(0),
+                        //Pega a coluna 1 do banco (Titulo da tabela categorias no banco de dados)
+                        Titulo = rd.GetString(1)
+
+                    });
+
+                    comandos.Parameters.Clear();
+                    
+                }
+
+
+            }
+            catch(SqlException e)
+           {
+               throw new Exception("Ocorreu um erro de banco de dados"+ e.Message);
+           }
+        
+            catch(Exception ex)
+            {
+              throw new Exception("Ocorreu um erro de banco de dados"+ ex.Message);
+            }
+
+            finally
+            {
+                Conexao.Close();
+               
             }
 
 
