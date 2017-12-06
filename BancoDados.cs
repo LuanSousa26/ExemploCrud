@@ -307,6 +307,65 @@ namespace ExemploCrud
 
         }
 
+ public List<Categorias> ListarCategorias(string Titulo)
+        {
+            List<Categorias> lista = new List<Categorias>();
+
+
+            try
+            {
+                Conexao = new SqlConnection();
+                Conexao.ConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=Papelaria;user id=sa;password=senai@123;";
+                Conexao.Open();
+                comandos.Connection = Conexao;
+
+
+                comandos.CommandType = CommandType.Text;
+
+
+                comandos.CommandText = "SELECT * FROM Categorias WHERE titulo LIKE @Titulo";
+                comandos.Parameters.AddWithValue(" @Titulo", Titulo);
+
+                //Reader
+                rd = comandos.ExecuteReader();
+                while (rd.Read())
+                {
+                    lista.Add(new Categorias()
+                    {
+                        //Pega a coluna 0 do banco (Id da tabela categorias no banco de dados)
+                        IdCategoria = rd.GetInt32(0),
+                        //Pega a coluna 1 do banco (Titulo da tabela categorias no banco de dados)
+                        Titulo = rd.GetString(1)
+
+                    });
+
+                    comandos.Parameters.Clear();
+
+                }
+
+
+            }
+            catch(SqlException e)
+           {
+               throw new Exception("Ocorreu um erro de banco de dados"+ e.Message);
+           }
+        
+            catch(Exception ex)
+            {
+              throw new Exception ("Ocorreu um erro" + ex.Message);
+            }
+            finally
+            {
+                Conexao.Close();
+            }
+
+
+            return lista;
+
+
+        }
+
+
     }
 
 

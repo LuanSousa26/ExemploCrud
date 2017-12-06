@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace ExemploCrud
@@ -7,7 +8,12 @@ namespace ExemploCrud
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+          List<Categorias> lista = new List<Categorias>();
+          BancoDados B1=new BancoDados();
+        
+            
+
+            
         }
     }
 }
